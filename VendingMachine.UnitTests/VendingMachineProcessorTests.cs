@@ -60,6 +60,24 @@ namespace VendingMachine.UnitTests
         }
 
         [Fact]
+        public void VendingMachine_AcceptCoinType_ValidNumberOfCoinsEntered()
+        {
+            // Arrange
+            _coinService.Setup(mock => mock.GetCoinType(It.IsAny<decimal>())).Returns(CreateValidAcceptedFiftyCentCoin);
+
+            // Act
+            var vendingMachine = new VendingMachineProcessor(_coinService.Object, _productService.Object);
+
+            VendingResponseType result = vendingMachine.AcceptCoinType(CreateValidFiftyCentCoin());
+
+            // Assert
+            Assert.Equal(result != null, true);
+            Assert.Equal(result.IsRejectedCoin, false);
+            Assert.Equal(result.IsSuccess, true);
+            Assert.Equal(result.Message, "1.00");
+        }
+
+        [Fact]
         public void VendingMachine_AcceptCoin_ValidCoinEntered()
         {
             // Arrange
@@ -323,6 +341,15 @@ namespace VendingMachine.UnitTests
             Assert.Equal(result.SingleOrDefault(item => item.Type == CoinType.FiveCent).Number, 20);
         }
 
+        private InputCoinType CreateValidFiftyCentCoin()
+        {
+            return new InputCoinType()
+            {
+                value = 0.50m,
+                NumberOfCoins =2
+            };
+        }
+
         private InputCoin CreateValidFiveCentCoin()
         {
             return new InputCoin()
@@ -382,6 +409,15 @@ namespace VendingMachine.UnitTests
                 Weight = 5.67m,
                 Type = CoinType.TwentyFiveCent,
                 Value = 0.20m
+            };
+        }
+
+        private ValidCoin CreateValidAcceptedFiftyCentCoin()
+        {
+            return new ValidCoin()
+            {
+                Type = CoinType.FiftyCent,
+                Value = 0.50m
             };
         }
 

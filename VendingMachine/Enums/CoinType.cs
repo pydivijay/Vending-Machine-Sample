@@ -4,6 +4,7 @@
     {
         FiveCent,
         TenCent,
-        TwentyFiveCent
+        TwentyFiveCent,
+        FiftyCent
     }
 }

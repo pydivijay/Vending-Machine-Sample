@@ -15,4 +15,11 @@
         /// </summary>
         public decimal Thickness { get; set; }
     }
+
+    public class InputCoinType
+    {
+        public decimal value { get; set; }
+
+        public int NumberOfCoins { get; set; }
+    }
 }

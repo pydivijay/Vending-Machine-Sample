@@ -44,6 +44,25 @@ static void DisplayItemChangeToScreen(IEnumerable<ItemChange> change)
     }
 }
 
+
+void DisplayVendingResponseTypeToScreen(VendingResponseType response)
+{
+    Console.WriteLine("Message : " + response.Message);
+    Console.WriteLine("IsRejectedCoin : " + response.IsRejectedCoin);
+    Console.WriteLine("Coin Type : " + response.CoinType);
+    Console.WriteLine("Number of coins : " + response.NumberOfCoins);
+
+    if (response.RejectedCoin != null)
+    {
+        Console.WriteLine("The Coin value: " + response.RejectedCoin.value);
+    }
+
+    if (response.Change != null)
+        DisplayItemChangeToScreen(response.Change);
+
+    Console.WriteLine("IsSuccess : " + response.IsSuccess);
+}
+
 var vm = new VendingMachineProcessor(new CoinService(), new ProductService(new ProductRepository(), new ProductInventoryRepository()));
 
 //case 1 - invalid coins            
@@ -79,6 +98,12 @@ DisplayVendingResponseToScreen(vm.SelectProduct("CHIPS1"));
 Console.WriteLine("\ncase 7 - valid coins, valid product code, correct(>=) amount entered, sold out, return coins\n");
 DisplayVendingResponseToScreen(vm.AcceptCoin(new InputCoin() { Weight = 2.268m, Diameter = 17.91m, Thickness = 1.35m }));
 DisplayVendingResponseToScreen(vm.SelectProduct("CHIPS1"));
+DisplayItemChangeToScreen(vm.ReturnCoins());
+
+//case 8 - coins type and NumberOfCoins, valid product code, return change coins            
+Console.WriteLine("\ncase 8 - valid coins type and NumberOfCoins, valid product code, and  return change coins\n");
+DisplayVendingResponseTypeToScreen(vm.AcceptCoinType(new InputCoinType() {value=0.50m,NumberOfCoins=2}));
+DisplayVendingResponseToScreen(vm.SelectProduct("CANDY1"));
 DisplayItemChangeToScreen(vm.ReturnCoins());
 
 Console.ReadLine();

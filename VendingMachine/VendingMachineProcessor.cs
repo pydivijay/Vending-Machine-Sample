@@ -167,9 +167,44 @@ namespace VendingMachine
             {
                 {CoinType.FiveCent, 0.05},
                 {CoinType.TenCent, 0.10},
-                {CoinType.TwentyFiveCent, 0.25}
+                {CoinType.TwentyFiveCent, 0.25},
+                {CoinType.FiftyCent, 0.50}
             };
-        } 
+        }
+        /// <summary>
+        /// Accept CoinType
+        /// </summary>
+        /// <param name="coinType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public VendingResponseType AcceptCoinType(InputCoinType coinType)
+        {
+            VendingResponseType response = new VendingResponseType();
+
+            if (coinType == null)
+                throw new ArgumentNullException("Coin parameter null!");
+
+            //check if the values correspond to an accepted coin            
+            var currentCoin = _coinService.GetCoinType(coinType.value);
+
+            //not a valid coin
+            if (currentCoin == null)
+            {
+                response.Message = "Insert Coin";
+                response.IsRejectedCoin = true;
+                response.RejectedCoin = coinType; //return rejected coin
+                return response;
+            }
+
+            //valid coin
+            _cost = currentCoin.Value * coinType.NumberOfCoins;
+            response.Message = _cost.ToString();
+            response.IsSuccess = true;
+            response.IsRejectedCoin = false;
+            response.CoinType = currentCoin.Type.ToString();
+            response.NumberOfCoins = coinType.NumberOfCoins;
+            return response;
+        }
         #endregion
     }
 }
