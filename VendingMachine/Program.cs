@@ -38,6 +38,9 @@ static void DisplayItemChangeToScreen(IEnumerable<ItemChange> change)
             case CoinType.TwentyFiveCent:
                 Console.WriteLine("Number Of 25 Cents : " + item.Number);
                 break;
+            case CoinType.FiftyCent:
+                Console.WriteLine("Number Of 50 Cents : " + item.Number);
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
